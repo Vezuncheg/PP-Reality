@@ -283,8 +283,13 @@ function showResult(){
   var utmMedium   = pageParams.get('utm_medium')   || '';
   var utmCampaign = pageParams.get('utm_campaign') || '';
   // Передаём в бота: архетип|utm_source|utm_medium|utm_campaign
-  var startParam = a.p + '|' + utmSource + '|' + utmMedium + '|' + utmCampaign;
-  var url='https://t.me/'+BOT+'?start='+encodeURIComponent(startParam);
+  // Telegram start принимает только буквы, цифры, - и _
+  // Используем __ как разделитель вместо |
+  var utmS = (utmSource   || '').replace(/[^a-zA-Z0-9_]/g, '_');
+  var utmM = (utmMedium   || '').replace(/[^a-zA-Z0-9_]/g, '_');
+  var utmC = (utmCampaign || '').replace(/[^a-zA-Z0-9_]/g, '_');
+  var startParam = a.p + '__' + utmS + '__' + utmM + '__' + utmC;
+  var url='https://t.me/'+BOT+'?start='+startParam;
   document.getElementById('qBox').style.display='none';
   document.querySelector('.quiz-label').style.display='none';
   var rb=document.getElementById('rb');
